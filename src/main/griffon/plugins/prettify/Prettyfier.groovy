@@ -24,6 +24,7 @@ import static griffon.util.GriffonNameUtils.capitalize
 /**
  * @author Andres Almiray
  */
+@groovy.transform.CompileStatic
 class Prettyfier {
     static String prettify(Date date, Map options = [:]) {
         if (!date) {
@@ -40,11 +41,11 @@ class Prettyfier {
     }
 
     private static String doPrettifyDate(Date date, Map options) {
-        PrettyTime prettyTime = new PrettyTime(options.reference, ApplicationHolder.application.locale)
+        PrettyTime prettyTime = new PrettyTime((Date) options.reference, ApplicationHolder.application.locale)
 
         String prettyfied = prettyTime.format(date).trim()
         if (options.capitalize) prettyfied = capitalize(prettyfied)
-        if (options.showTime) prettyfied += ', ' + date.format(options.format)
+        if (options.showTime) prettyfied += ', ' + date.format((String) options.format)
         prettyfied
     }
 
