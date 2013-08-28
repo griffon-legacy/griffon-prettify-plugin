@@ -59,8 +59,8 @@ PrettyTime creates human readable, relative timestamps like those seen on Digg,
 Twitter, and Facebook. It's simple, get started 'right now!' and in over 30 languages!
 
 PrettyTime :: NLP is an OpenSource, Java Library - enabling simple parsing and computer
-understanding of natural language, and social date references like, "let’s go to dinner
-at 6," or "I’ll be on vacation for three days".
+understanding of natural language, and social date references like, "let's go to dinner
+at 6," or "I'll be on vacation for three days".
 
 ## Usage ##
 
