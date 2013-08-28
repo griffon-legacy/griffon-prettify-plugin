@@ -16,9 +16,11 @@
 
 package griffon.plugins.prettify
 
-import griffon.util.ApplicationHolder
 import org.ocpsoft.prettytime.PrettyTime
+import org.ocpsoft.prettytime.nlp.PrettyTimeParser
+import org.ocpsoft.prettytime.nlp.parse.DateGroup
 
+import static griffon.util.ApplicationHolder.getApplication
 import static griffon.util.GriffonNameUtils.capitalize
 
 /**
@@ -26,22 +28,48 @@ import static griffon.util.GriffonNameUtils.capitalize
  */
 @groovy.transform.CompileStatic
 class Prettyfier {
+    @Deprecated
     static String prettify(Date date, Map options = [:]) {
+        toPrettyTime(date, options)
+    }
+
+    @Deprecated
+    static String prettify(Calendar calendar, Map options = [:]) {
+        toPrettyTime(calendar, options)
+    }
+
+    static String toPrettyTime(Date date, Map options = [:]) {
         if (!date) {
             throw new IllegalArgumentException('Invalid input, date is null.')
         }
         doPrettifyDate(date, normalizeOptions(options))
     }
 
-    static String prettify(Calendar calendar, Map options = [:]) {
+    static String toPrettyTime(Calendar calendar, Map options = [:]) {
         if (!calendar) {
             throw new IllegalArgumentException('Invalid input, calendar is null.')
         }
         doPrettifyDate(calendar.time, normalizeOptions(options))
     }
 
+    static List<Date> fromPrettyTime(String string, TimeZone timezone = null) {
+        if (!string) {
+            throw new IllegalArgumentException('Invalid input, string is null.')
+        }
+        PrettyTimeParser parser = timezone ? new PrettyTimeParser(timezone) : new PrettyTimeParser()
+        parser.parse(string)
+    }
+
+    static List<DateGroup> fromPrettyTimeSyntax(String string, TimeZone timezone = null) {
+        if (!string) {
+            throw new IllegalArgumentException('Invalid input, string is null.')
+        }
+        PrettyTimeParser parser = timezone ? new PrettyTimeParser(timezone) : new PrettyTimeParser()
+        parser.parseSyntax(string)
+    }
+
     private static String doPrettifyDate(Date date, Map options) {
-        PrettyTime prettyTime = new PrettyTime((Date) options.reference, ApplicationHolder.application.locale)
+        PrettyTime prettyTime = new PrettyTime((Date) options.reference, application.locale)
 
         String prettyfied = prettyTime.format(date).trim()
         if (options.capitalize) prettyfied = capitalize(prettyfied)
@@ -54,7 +82,7 @@ class Prettyfier {
             reference: options.reference ?: new Date(),
             showTime: options.showTime ?: false,
             capitalize: options.capitalize ?: false,
-            format: options.format ?: ApplicationHolder.application.getMessage('default.date.format', 'hh:mm:ss a')
+            format: options.format ?: application.getMessage('default.date.format', 'hh:mm:ss a')
         ]
 
         normalized.showTime = normalized.showTime as boolean

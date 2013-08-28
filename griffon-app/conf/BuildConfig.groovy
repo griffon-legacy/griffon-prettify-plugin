@@ -6,13 +6,13 @@ griffon.project.dependency.resolution = {
         mavenCentral()
     }
     dependencies {
-        compile 'org.ocpsoft.prettytime:prettytime:2.1.3.Final'
+        String prettytimeVersion = '3.0.2.Final'
+        compile "org.ocpsoft.prettytime:prettytime:$prettytimeVersion"
+        compile "org.ocpsoft.prettytime:prettytime-nlp:$prettytimeVersion"
     }
 }
 
 log4j = {
-    // Example of changing the log pattern for the default console
-    // appender:
     appenders {
         console name: 'stdout', layout: pattern(conversionPattern: '%d [%t] %-5p %c - %m%n')
     }
